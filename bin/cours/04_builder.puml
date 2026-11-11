@@ -1,0 +1,62 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "cours" {
+    class Client {
+        + {static} main(args : String[]) : void
+    }
+
+    class Directeur {
+        + construirePizzaPiquante() : Pizza
+        + construirePizzaReine() : Pizza
+    }
+}
+
+package "cours.modeles" {
+    class Pizza {
+        - pate : String
+        - sauce : String
+        - garniture : String
+        + setPate(pate : String) : void
+        + setSauce(sauce : String) : void
+        + setGarniture(garniture : String) : void
+        + print() : void
+    }
+}
+
+package "cours.abstractions" {
+    abstract class MonteurPizza {
+        # pizza : Pizza
+        + getPizza() : Pizza
+        + {abstract} monterPate() : void
+        + {abstract} monterSauce() : void
+        + {abstract} monterGarniture() : void
+    }
+}
+
+package "cours.builders" {
+    class MonteurPizzaReine {
+        + monterPate() : void
+        + monterSauce() : void
+        + monterGarniture() : void
+    }
+
+    class MonteurPizzaPiquante {
+        + monterPate() : void
+        + monterSauce() : void
+        + monterGarniture() : void
+    }
+}
+
+MonteurPizza <|-- MonteurPizzaReine
+MonteurPizza <|-- MonteurPizzaPiquante
+
+MonteurPizza ..> Pizza : <<create>>
+MonteurPizzaReine ..> Pizza : <<create>>
+MonteurPizzaPiquante ..> Pizza : <<create>>
+
+Directeur --> MonteurPizza : monteurAbstrait
+Client ..> Directeur : <<use>>
+Client ..> Pizza : <<use>>
+
+@enduml
